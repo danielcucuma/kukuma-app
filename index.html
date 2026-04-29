@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daniel Cucuma — Automatización con IA para empresas B2B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         oklch(0.10 0.015 240);
+    --bg-2:       oklch(0.13 0.015 240);
+    --bg-3:       oklch(0.16 0.015 240);
+    --border:     oklch(0.25 0.015 240);
+    --text:       oklch(0.94 0.008 240);
+    --muted:      oklch(0.55 0.012 240);
+    --green:      oklch(0.72 0.22 145);
+    --green-dim:  oklch(0.55 0.18 145);
+    --violet:     oklch(0.72 0.22 275);
+    --font-head:  'Space Grotesk', sans-serif;
+    --font-mono:  'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-head);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* DOT GRID */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, oklch(0.35 0.015 240) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  section, nav, footer { position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 64px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: oklch(0.10 0.015 240 / 0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--green);
+    letter-spacing: 0.04em;
+  }
+
+  .nav-logo span { color: var(--muted); }
+
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green);
+    color: oklch(0.10 0.015 240);
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+  .nav-cta svg { flex-shrink: 0; }
+
+  /* HERO */
+  .hero {
+    padding: 96px 64px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    min-height: 88vh;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--green);
+  }
+
+  h1 {
+    font-size: clamp(36px, 4.5vw, 62px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--green);
+  }
+
+  .hero-sub {
+    margin-top: 28px;
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 520px;
+    text-wrap: pretty;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 44px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--green);
+    color: oklch(0.10 0.015 240);
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    padding: 16px 32px;
+    border-radius: 4px;
+    transition: transform 0.18s, opacity 0.18s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+
+  .btn-ghost {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--text); }
+  .btn-ghost::after { content: '↓'; }
+
+  /* HERO RIGHT — STATS CARD */
+  .hero-metrics {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .metric-row {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .metric-row:first-child { padding-top: 0; }
+  .metric-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .metric-num {
+    font-family: var(--font-mono);
+    font-size: 42px;
+    font-weight: 500;
+    color: var(--green);
+    line-height: 1;
+    min-width: 120px;
+  }
+
+  .metric-num sup {
+    font-size: 18px;
+    vertical-align: super;
+    margin-left: 2px;
+  }
+
+  .metric-label {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-top: 6px;
+    text-wrap: pretty;
+  }
+  .metric-label strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 15px; }
+
+  .metric-badge {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 6px 14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--green);
+    border: 1px solid oklch(0.72 0.22 145 / 0.35);
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  }
+
+  /* PROBLEM */
+  .problem {
+    padding: 96px 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--violet);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--violet);
+  }
+
+  h2 {
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+    text-wrap: pretty;
+    margin-bottom: 16px;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 56px;
+    align-items: start;
+  }
+
+  .problem-copy p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 16px;
+    text-wrap: pretty;
+  }
+
+  .pain-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+    transition: border-color 0.2s;
+  }
+  .pain-item:hover { border-color: oklch(0.72 0.22 275 / 0.5); }
+
+  .pain-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: oklch(0.72 0.22 275 / 0.12);
+    border-radius: 4px;
+    color: var(--violet);
+    font-size: 14px;
+    margin-top: 1px;
+  }
+
+  .pain-item strong { color: var(--text); }
+
+  /* CASES */
+  .cases {
+    background: var(--bg-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .cases-inner {
+    padding: 96px 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .cases-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: end;
+    margin-bottom: 56px;
+  }
+
+  .cases-header p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  .case-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .case-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    transition: border-color 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--green);
+  }
+  .case-card:hover { border-color: oklch(0.72 0.22 145 / 0.45); }
+
+  .case-num {
+    font-family: var(--font-mono);
+    font-size: 52px;
+    font-weight: 500;
+    color: var(--green);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .case-result {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+
+  .case-before-after {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .case-ba-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+  }
+
+  .ba-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    width: 36px;
+    flex-shrink: 0;
+    color: var(--muted);
+  }
+
+  .ba-before { color: oklch(0.55 0.12 20); }
+  .ba-after  { color: var(--green); }
+
+  .case-tech {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+
+  .tech-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* SERVICES */
+  .services {
+    padding: 96px 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .services-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 56px;
+    align-items: end;
+  }
+
+  .services-header p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .service-item {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-2);
+    cursor: default;
+    transition: background 0.2s, border-color 0.2s;
+    position: relative;
+  }
+  .service-item:hover {
+    background: var(--bg-3);
+    border-color: oklch(0.72 0.22 145 / 0.35);
+  }
+
+  .service-num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--green);
+  }
+
+  .service-content h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .service-content p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .service-arrow {
+    color: var(--border);
+    font-size: 18px;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .service-item:hover .service-arrow {
+    color: var(--green);
+    transform: translateX(4px);
+  }
+
+  /* WHY ME */
+  .why {
+    background: var(--bg-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .why-inner {
+    padding: 96px 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .why-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    transition: border-color 0.2s;
+  }
+  .why-card:hover { border-color: oklch(0.72 0.22 145 / 0.4); }
+
+  .why-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: oklch(0.72 0.22 145 / 0.1);
+    border-radius: 6px;
+    color: var(--green);
+    margin-bottom: 20px;
+  }
+
+  .why-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .why-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  /* IDEAL CLIENT */
+  .ideal {
+    padding: 96px 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: center;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    background: oklch(0.72 0.22 145 / 0.12);
+    border: 1px solid oklch(0.72 0.22 145 / 0.5);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green);
+    margin-top: 2px;
+    font-size: 11px;
+  }
+
+  .ideal-callout {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 48px;
+  }
+
+  .callout-stat {
+    font-family: var(--font-mono);
+    font-size: 56px;
+    font-weight: 500;
+    color: var(--green);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .callout-label {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    text-wrap: pretty;
+    line-height: 1.5;
+  }
+
+  .callout-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 32px;
+  }
+
+  .callout-note {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* CTA FINAL */
+  .cta-final {
+    padding: 120px 64px;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .cta-final h2 {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  .cta-final p {
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    text-wrap: pretty;
+  }
+
+  .wa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #25D366;
+    color: #fff;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 17px;
+    text-decoration: none;
+    padding: 20px 44px;
+    border-radius: 6px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 40px oklch(0.72 0.22 145 / 0.2);
+  }
+  .wa-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 48px oklch(0.72 0.22 145 / 0.35);
+  }
+
+  .cta-note {
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 64px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--green); }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* COUNTER */
+  .count-up {
+    display: inline-block;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 32px; }
+    .hero { padding: 64px 32px; grid-template-columns: 1fr; gap: 48px; min-height: auto; }
+    .hero-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+    .metric-row { border-bottom: none; border-right: 1px solid var(--border); padding: 0 24px; }
+    .metric-row:last-child { border-right: none; }
+    .problem-grid, .cases-header, .services-header, .why-grid { grid-template-columns: 1fr; gap: 32px; }
+    .case-cards { grid-template-columns: 1fr; }
+    .ideal { grid-template-columns: 1fr; gap: 48px; }
+    .problem, .cases-inner, .services, .why-inner, .ideal, .cta-final { padding: 64px 32px; }
+    footer { padding: 32px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 16px 20px; }
+    h1 { font-size: 32px; }
+    .hero { padding: 48px 20px; }
+    .hero-metrics { grid-template-columns: 1fr; }
+    .metric-row { border-right: none; border-bottom: 1px solid var(--border); padding: 20px 0; }
+    .metric-row:last-child { border-bottom: none; }
+    .problem, .cases-inner, .services, .why-inner, .ideal, .cta-final { padding: 56px 20px; }
+    footer { padding: 24px 20px; }
+    .service-item { grid-template-columns: 40px 1fr auto; gap: 12px; padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">daniel<span>.</span>cucuma<span> // IA & Automatización</span></div>
+  <a href="https://wa.me/573337161423?text=Hola%20Daniel%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20gratuito" class="nav-cta" target="_blank" rel="noopener">
+    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.107.549 4.09 1.512 5.814L.057 23.943l6.305-1.438A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894c-1.846 0-3.567-.498-5.042-1.362l-.361-.214-3.741.854.885-3.639-.235-.373A9.866 9.866 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+    Diagnóstico gratuito
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Consultor de Automatización IA · LATAM</div>
+    <h1>Implemento agentes de IA que <em>eliminan trabajo manual</em> en tu empresa</h1>
+    <p class="hero-sub">Ayudo a PYMEs B2B de 10 a 80 empleados en Colombia y LATAM a recuperar tiempo y reducir costos operativos con automatización real — no demos.</p>
+    <div class="hero-actions">
+      <a href="https://wa.me/573337161423?text=Hola%20Daniel%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20gratuito" class="btn-primary" target="_blank" rel="noopener">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.107.549 4.09 1.512 5.814L.057 23.943l6.305-1.438A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894c-1.846 0-3.567-.498-5.042-1.362l-.361-.214-3.741.854.885-3.639-.235-.373A9.866 9.866 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+        Agendar diagnóstico gratuito
+      </a>
+      <a href="#casos" class="btn-ghost">Ver casos de estudio</a>
+    </div>
+  </div>
+
+  <div class="hero-metrics">
+    <div class="metric-row">
+      <div class="metric-num"><span class="count-up" data-target="15">0</span>–<span class="count-up" data-target="30">0</span>h</div>
+      <div class="metric-label">
+        <strong>Horas recuperadas por semana</strong>
+        Desde el primer mes de implementación
+      </div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-num"><span class="count-up" data-target="902">0</span></div>
+      <div class="metric-label">
+        <strong>Documentos RRHH procesados</strong>
+        Con OCR — proceso de 2 días en 10 minutos
+      </div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-num">$0</div>
+      <div class="metric-label">
+        <strong>Costo de procesamiento de docs</strong>
+        Reemplazamos proveedor de $1/doc con NVIDIA NIM API gratuita
+      </div>
+    </div>
+    <div class="metric-badge">Resultados reales · sin hype</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problema">
+  <div class="fade-up">
+    <div class="section-label">El problema</div>
+    <h2>Tu empresa crece, pero los procesos manuales no escalan</h2>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-copy fade-up">
+      <p>Las PYMEs en LATAM pierden decenas de horas a la semana en tareas que deberían estar automatizadas: copiar datos entre sistemas, procesar documentos a mano, responder las mismas preguntas repetidas.</p>
+      <p>No es un problema de personas — es un problema de procesos. Y tiene solución.</p>
+    </div>
+    <div class="pain-list fade-up">
+      <div class="pain-item">
+        <div class="pain-icon">⏱</div>
+        <div><strong>Tiempo perdido en tareas repetitivas</strong><br>Tu equipo hace manualmente lo que una automatización haría en segundos.</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">🔀</div>
+        <div><strong>Datos dispersos entre sistemas</strong><br>WhatsApp, Excel, correo y ERP que nunca hablan entre sí. Todo manual.</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">💸</div>
+        <div><strong>Proveedores caros para tareas simples</strong><br>Pagando por software o servicios que la IA puede reemplazar a cero costo.</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">📉</div>
+        <div><strong>Crecimiento que genera más trabajo, no más margen</strong><br>Cada cliente nuevo suma horas operativas en lugar de sumar rentabilidad.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CASOS -->
+<section class="cases" id="casos">
+  <div class="cases-inner">
+    <div class="cases-header fade-up">
+      <div>
+        <div class="section-label">Casos de estudio</div>
+        <h2>Resultados reales, números reales</h2>
+      </div>
+      <p>No demos. No pilotos infinitos. Implementaciones que funcionan desde el primer mes y generan resultados medibles desde el día uno.</p>
+    </div>
+    <div class="case-cards">
+
+      <div class="case-card fade-up">
+        <div class="case-num"><span class="count-up" data-target="902">0</span></div>
+        <div class="case-result">Documentos de RRHH organizados automáticamente con OCR</div>
+        <div class="case-before-after">
+          <div class="case-ba-row">
+            <span class="ba-label">Antes</span>
+            <span class="ba-before">2 días de trabajo manual por lote</span>
+          </div>
+          <div class="case-ba-row">
+            <span class="ba-label">Ahora</span>
+            <span class="ba-after">10 minutos — sin intervención humana</span>
+          </div>
+        </div>
+        <div class="case-tech">
+          <span class="tech-tag">OCR</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">n8n</span>
+          <span class="tech-tag">RRHH</span>
+        </div>
+      </div>
+
+      <div class="case-card fade-up">
+        <div class="case-num">$0</div>
+        <div class="case-result">Procesamiento de documentos a costo cero — mismo resultado</div>
+        <div class="case-before-after">
+          <div class="case-ba-row">
+            <span class="ba-label">Antes</span>
+            <span class="ba-before">Proveedor cobrando $1 por documento</span>
+          </div>
+          <div class="case-ba-row">
+            <span class="ba-label">Ahora</span>
+            <span class="ba-after">NVIDIA NIM API — sin costo operativo</span>
+          </div>
+        </div>
+        <div class="case-tech">
+          <span class="tech-tag">NVIDIA NIM</span>
+          <span class="tech-tag">API</span>
+          <span class="tech-tag">Cost reduction</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="servicios">
+  <div class="services-header fade-up">
+    <div>
+      <div class="section-label">Servicios</div>
+      <h2>Lo que implemento en tu empresa</h2>
+    </div>
+    <p>No consultoría genérica — implementación real. Entrego automatizaciones funcionando, no documentos de recomendaciones.</p>
+  </div>
+  <div class="service-list fade-up">
+    <div class="service-item">
+      <div class="service-num">01</div>
+      <div class="service-content">
+        <h3>Diagnóstico de procesos automatizables</h3>
+        <p>Mapeo qué está costando tiempo y dinero — y qué se puede automatizar con mayor impacto.</p>
+      </div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-item">
+      <div class="service-num">02</div>
+      <div class="service-content">
+        <h3>Implementación con Make, n8n, Python e IA</h3>
+        <p>Automatizaciones reales conectadas a tus sistemas actuales — sin necesidad de cambiar tu stack.</p>
+      </div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-item">
+      <div class="service-num">03</div>
+      <div class="service-content">
+        <h3>Agentes de IA personalizados</h3>
+        <p>Agentes que operan dentro de tus flujos de trabajo: clasifican, responden, deciden y notifican.</p>
+      </div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-item">
+      <div class="service-num">04</div>
+      <div class="service-content">
+        <h3>Dashboard en Power BI conectado en tiempo real</h3>
+        <p>Visibilidad total sobre tus procesos automatizados — métricas actualizadas automáticamente.</p>
+      </div>
+      <div class="service-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- WHY ME -->
+<section class="why" id="por-que">
+  <div class="why-inner">
+    <div class="fade-up">
+      <div class="section-label">Por qué yo</div>
+      <h2>Sin agencia. Sin intermediarios. Solo resultados.</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card fade-up">
+        <div class="why-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Enfoque en resultados, no en herramientas</h3>
+        <p>No vendo software ni suscripciones. Implemento lo que funciona para tu caso específico — Make, n8n, Python o lo que resuelva el problema más rápido.</p>
+      </div>
+      <div class="why-card fade-up">
+        <div class="why-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Implementación en semanas, no meses</h3>
+        <p>Diagnóstico en la primera semana. Primera automatización funcionando en 2–3 semanas. Sin fases interminables de consultoría.</p>
+      </div>
+      <div class="why-card fade-up">
+        <div class="why-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Contexto LATAM</h3>
+        <p>Entiendo las restricciones reales de PYMEs en Colombia y LATAM — presupuesto, infraestructura, resistencia al cambio — y diseño soluciones que funcionan dentro de esas realidades.</p>
+      </div>
+      <div class="why-card fade-up">
+        <div class="why-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+        </div>
+        <h3>Stack de última generación</h3>
+        <p>NVIDIA NIM, modelos open-source, APIs gratuitas cuando existen. No pagas más de lo necesario por la misma calidad de resultado.</p>
+      </div>
+      <div class="why-card fade-up">
+        <div class="why-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Trabajo directo, comunicación directa</h3>
+        <p>No delegas a un junior. Hablo contigo directamente, entiendo tu operación y soy responsable del resultado.</p>
+      </div>
+      <div class="why-card fade-up">
+        <div class="why-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h3>Pago por resultados, no por horas</h3>
+        <p>Mis proyectos tienen entregables claros. Sabes exactamente qué recibes, cuándo y cuánto cuesta — sin sorpresas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IDEAL CLIENT -->
+<section class="ideal" id="para-quien">
+  <div class="fade-up">
+    <div class="section-label">¿Es esto para ti?</div>
+    <h2>Para dueños y gerentes de PYMEs B2B en LATAM</h2>
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box">✓</div>
+        Tienes entre 10 y 80 empleados
+      </div>
+      <div class="check-item">
+        <div class="check-box">✓</div>
+        Hay procesos manuales que se repiten cada semana y consumen tiempo del equipo
+      </div>
+      <div class="check-item">
+        <div class="check-box">✓</div>
+        Sientes que cada cliente nuevo genera más trabajo operativo en lugar de más margen
+      </div>
+      <div class="check-item">
+        <div class="check-box">✓</div>
+        Quieres escalar sin contratar más personas para tareas administrativas
+      </div>
+      <div class="check-item">
+        <div class="check-box">✓</div>
+        Operas en Colombia, México, Chile, Perú, Argentina o cualquier país de LATAM
+      </div>
+    </div>
+  </div>
+  <div class="ideal-callout fade-up">
+    <div class="callout-stat">30h</div>
+    <div class="callout-label">es el promedio de horas semanales que recuperan las empresas que trabajo conmigo — desde el primer mes.</div>
+    <div class="callout-divider"></div>
+    <div class="callout-note">"Lo que más sorprende a mis clientes no es que funcione — es que funciona mucho más rápido de lo que esperaban."</div>
+    <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 11px; color: var(--green); letter-spacing: 0.1em;">— Daniel Cucuma</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CTA FINAL -->
+<section style="background: var(--bg-2); border-top: 1px solid var(--border);">
+  <div class="cta-final fade-up">
+    <div class="section-label" style="justify-content: center;">Agenda tu llamada</div>
+    <h2>30 minutos pueden cambiar cómo opera tu empresa</h2>
+    <p>Una llamada de diagnóstico gratuita para entender tus procesos, identificar qué se puede automatizar y darte claridad sobre el potencial de ahorro — sin compromiso.</p>
+    <a href="https://wa.me/573337161423?text=Hola%20Daniel%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20gratuito%20de%2030%20minutos" class="wa-btn" target="_blank" rel="noopener">
+      <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.107.549 4.09 1.512 5.814L.057 23.943l6.305-1.438A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894c-1.846 0-3.567-.498-5.042-1.362l-.361-.214-3.741.854.885-3.639-.235-.373A9.866 9.866 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106S21.894 6.58 21.894 12 17.42 21.894 12 21.894z"/></svg>
+      Hablar con Daniel por WhatsApp
+    </a>
+    <div class="cta-note">Respondo en menos de 24 horas · Llamada de 30 min · Sin compromiso</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-family: var(--font-mono); font-size: 12px; color: var(--muted);">
+    © 2026 Daniel Cucuma · Automatización con IA · Colombia
+  </div>
+  <div style="display: flex; gap: 24px; align-items: center;">
+    <a href="mailto:hola@danielcucuma.com">hola@danielcucuma.com</a>
+    <a href="https://wa.me/573337161423" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="https://www.linkedin.com/in/daniel-cucuma-849571224" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+// COUNT-UP ANIMATION
+function animateCount(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const duration = 1800;
+  const startTime = performance.now();
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(ease * target);
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// INTERSECTION OBSERVER for fade-up + count-up
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      entry.target.querySelectorAll('.count-up').forEach(animateCount);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Also observe count-up elements that might not be inside fade-up
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCount(entry.target);
+      countObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.count-up').forEach(el => {
+  const parent = el.closest('.fade-up');
+  if (!parent) countObserver.observe(el);
+});
+</script>
+
+</body>
+</html>
